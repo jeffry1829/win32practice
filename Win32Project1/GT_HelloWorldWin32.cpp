@@ -77,13 +77,12 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	return (int)msg.wParam;
 }
-
+TCHAR text[100];
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	PAINTSTRUCT ps;
 	HDC hdc;
-	TCHAR text[100] = {};
-	
+
 	switch (message)
 	{
 	case WM_PAINT:
@@ -98,14 +97,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_KEYDOWN:
 	{
-		char tmp[1] = { (char)wParam };
+		char tmp[2];
+		tmp[0] = (char) wParam;
+		tmp[1] = NULL;
 		_tcscat_s(text, Cs2T(tmp));
-		hdc = BeginPaint(hWnd, &ps);
-		TextOut(hdc,
-			5, 5,
-			text, _tcslen(text));
-		EndPaint(hWnd, &ps);
-		UpdateWindow(hWnd);
+		RedrawWindow(hWnd, NULL, NULL, RDW_INVALIDATE | RDW_UPDATENOW);
 		break;
 	}
 	default:
